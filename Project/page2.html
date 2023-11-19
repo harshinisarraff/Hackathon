@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPECIAL RESOURCES</title>
+  <style>
+      body {
+          font-family: Monaco, Helvetica, sans-serif;
+          margin: 0;
+          padding: 0;
+          background-color: #f0f0f0;
+          color: #333;
+      }
+      header {
+          color: black;
+          padding: 10px 0;
+          text-align: center;
+      }
+      .topnav {
+          overflow: hidden;
+          background-color: #F6B26B;
+      }
+      .topnav a {
+          float: left;
+          color: #f2f2f2;
+          text-align: center;
+          padding: 14px 16px;
+          text-decoration: none;
+          font-size: 17px;
+      }
+      .topnav a:hover {
+          background-color: #99DBE3;
+          color: white;
+      }
+      .topnav a.active {
+          background-color: #99DBE3;
+          color: white;
+      }
+      ul {
+          list-style-type: none;
+          padding: 0;
+      }
+      li {
+          margin: 10px 0;
+      }
+      a {
+          color: #007bff;
+          text-decoration: none;
+      }
+      a:hover {
+          text-decoration: underline;
+      }
+      h1 {
+          text-align: center;
+      }
+  </style>
+</head>
+<body>
+  <div class="topnav">
+      <a class="active">&#127818</a>
+      <a href="index.html">Home</a>
+      <a href="page1.html">Information</a>
+      <a href="page3.html">Resources</a>
+
+
+
+  </div>
+  <header>
+
+
+
+
+
+
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>POP THE ORANGE</title>
+    <style>
+        body {
+            font-family: Monaco;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        #game-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        .orange {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-image: url('orange.jpeg');
+            background-size: cover;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+        }
+        #score {
+            font-size: 24px;
+            margin: 20px;
+        }
+        #level {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+        #timer {
+            font-size: 18px;
+        }
+        #quote {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>POP THE ORANGE!</h1>
+    <p>CLICK TO POP THE ORANGES AND RELIEVE STRESS! A SURPRISE QUOTE WAITING FOR U :)</p>
+
+    <div id="game-container"></div>
+    <div id="score">Score: 0</div>
+    <div id="level">Level: 1</div>
+    <div id="timer">Time left: 0s</div>
+    <div id="quote"></div>
+
+    <script>
+        const gameContainer = document.getElementById('game-container');
+        const scoreDisplay = document.getElementById('score');
+        const levelDisplay = document.getElementById('level');
+        const timerDisplay = document.getElementById('timer');
+        const quoteDisplay = document.getElementById('quote');
+        const numOranges = 20;
+        const initialLevelTime = 30; 
+        const orangeImagePath = 'orange.jpeg'; 
+
+        const motivationalQuotes = [
+          "Why did the cookie go to the doctor? It was feeling crumbly!",
+          "What do you call a bear with no teeth? A gummy bear!",
+          "How do you organize a space party? You planet!",
+          "What's brown and sticky? A stick!",
+          "Why don't scientists trust atoms? Because they make up everything!",
+        ];
+
+        let score = 0;
+        let level = 1;
+        let levelTime = initialLevelTime;
+        let timerInterval;
+
+        function getRandomQuote() {
+            return motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
+        }
+
+        function generateOranges() {
+            gameContainer.innerHTML = '';
+
+            
+            for (let i = 0; i < numOranges; i++) {
+                const orange = document.createElement('div');
+                orange.className = 'orange';
+                orange.style.left = `${Math.random() * 350}px`;  
+                orange.style.top = `${Math.random() * 350}px`; 
+                gameContainer.appendChild(orange);
+            }
+
+            const oranges = document.querySelectorAll('.orange');
+            oranges.forEach(orange => {
+                orange.addEventListener('click', () => {
+                    orange.style.transform = 'scale(0)'; 
+                    setTimeout(() => {
+                        gameContainer.removeChild(orange); // Remove the orange
+                        score++;
+
+                        if (score % 5 === 0) {
+                            level++;
+                            levelTime += 10; 
+                            levelDisplay.textContent = `Level: ${level}`;
+                        }
+
+                        if (gameContainer.childElementCount === 0) {
+                            clearInterval(timerInterval);  //stops the code 
+                            scoreDisplay.textContent = `Score: ${score}`;
+                            showMotivationalQuote();
+                            setTimeout(startLevel, 5000); 
+                        }
+                    }, 300);
+                });
+            });
+
+            
+            startTimer();
+        }
+
+        function startTimer() {
+            let timeLeft = levelTime;
+            timerDisplay.textContent = `Time left: ${timeLeft}s`;
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = `Time left: ${timeLeft}s`;
+                if (timeLeft < 0) {
+                    clearInterval(timerInterval);
+                    gameContainer.innerHTML = '';
+                    scoreDisplay.textContent = `Score: ${score}`;
+                    levelDisplay.textContent = `Level: ${level}`;
+                    showMotivationalQuote();
+                    setTimeout(startLevel, 5000); 
+                }
+            }, 1000);
+        }
+
+        function showMotivationalQuote() {
+            quoteDisplay.textContent = getRandomQuote();
+        }
+
+        function startLevel() {
+            scoreDisplay.textContent = `Score: ${score}`;
+            levelDisplay.textContent = `Level: ${level}`;
+            timerDisplay.textContent = `Time left: ${levelTime}s`;
+            levelTime = initialLevelTime;
+            generateOranges();
+        }
+
+        
+        startLevel();
+    </script>
+</body>
+</html>
